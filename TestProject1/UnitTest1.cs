@@ -5,15 +5,35 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace TestProject1;
 
+public class TestConsole : IConsole
+{
+    List<string> _lines = ["1", "1", "1", "2", "1", "1"];
+    public void WriteLine(string? message = null)
+    {
+    }
+
+    public string? ReadLine()
+    {
+        if (_lines.Count > 1)
+        {
+            var line = _lines[0];
+            _lines.RemoveAt(0);
+            return line;
+        }
+
+        return "5";
+    }
+}
+
 [TestFixture]
 public class Tests
 {
-    private ICalculator _calculator = new Calculator();
+    private ICalculator _calculator = new Calculator(new TestConsole());
 
     [Test]
     public void TestInitCalculator()
     {
-        _calculator = new Calculator();
+        _calculator = new Calculator(new TestConsole());
         _calculator.Should().NotBeNull();
     }
     
@@ -65,8 +85,9 @@ public class Tests
     }
     
     [Test]
-    public void TestRunCalculator()
+    public void TestCalculatorRun()
     {
-        Program.Run([]);
+        _calculator.RunCalculator();
     }
+    
 }

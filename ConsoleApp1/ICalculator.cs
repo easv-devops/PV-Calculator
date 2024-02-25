@@ -12,12 +12,33 @@ public interface ICalculator
     void RunCalculator();
 }
 
+public interface IConsole
+{
+    void WriteLine(string? message = null);
+    string? ReadLine();
+}
+
+public class ConsoleWrapper : IConsole
+{
+    public void WriteLine(string? message)
+    {
+        Console.WriteLine(message);
+    }
+
+    public string? ReadLine()
+    {
+        return Console.ReadLine();
+    }
+}
+
+
 public class Calculator : ICalculator
 {
     private readonly SQLiteConnection _conn;
-
-    public Calculator()
+    private readonly IConsole _console;
+    public Calculator(IConsole console)
     {
+        _console = console;
         _conn = CreateConnection();
 
         using var cmd = new SQLiteCommand(_conn);
@@ -80,76 +101,71 @@ public class Calculator : ICalculator
         cmd.CommandText = "SELECT * FROM calculator";
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
-            Console.WriteLine(
+            _console.WriteLine(
                 $"id: {reader.GetInt32(0)}, operation: {reader.GetString(1)}, result: {reader.GetDouble(2)}, n1: {reader.GetDouble(3)}, n2: {reader.GetDouble(4)}");
+        _console.WriteLine();
     }
 
     public void RunCalculator()
     {
-while (true)
-{
-    ICalculator calculator = new Calculator();
-    // ask for math operation switch
-    Console.WriteLine("Enter the math operation you want to perform: ");
-    Console.WriteLine("1. Add");
-    Console.WriteLine("2. Subtract");
-    Console.WriteLine("3. Multiply");
-    Console.WriteLine("4. Divide");
-    Console.WriteLine("5. Exit");
-    var operation = Console.ReadLine();
-    if (operation == "5") break;
-    
-    if (operation == "0")
-    {
-        calculator.PrintRows();
-        Console.WriteLine();
-        continue;
-    }
-    
-    // ask for numbers
-    Console.WriteLine("Enter the first number: ");
-    var n1 = Convert.ToDouble(Console.ReadLine());
-    Console.WriteLine("Enter the second number: ");
-    var n2 = Convert.ToDouble(Console.ReadLine());
-    // perform operation
-    double result = 0;
-    switch (operation)
-    {
-        case "1":
-            result = calculator.Add(n1, n2);
-            break;
-        case "2":
-            result = calculator.Subtract(n1, n2);
-            break;
-        case "3":
-            result = calculator.Multiply(n1, n2);
-            break;
-        case "4":
-            if (n2 == 0)
+        while (true)
+        {
+            PrintOptions();
+
+            var operation = _console.ReadLine();
+            if (operation == "5") break;
+
+            if (operation == "0")
             {
-                Console.WriteLine("Cannot divide by zero");
-                break;
+                PrintRows(); 
+                continue;
             }
-    
-            result = calculator.Divide(n1, n2);
-            break;
-    
-        default:
-            Console.WriteLine("Invalid operation");
-            break;
-    }
-    
-    //change text color
-    Console.ForegroundColor = ConsoleColor.Green;
-    // print result
-    Console.WriteLine("The result is: " + result);
-    // reset text color
-    Console.ResetColor();
-    Console.WriteLine();
-}
-    
+
+            // ask for numbers
+            _console.WriteLine("Enter the first number: ");
+            var n1 = Convert.ToDouble(_console.ReadLine());
+            _console.WriteLine("Enter the second number: ");
+            var n2 = Convert.ToDouble(_console.ReadLine());
+
+            PrintResult(Calculate(n1, n2, operation!));
+        }
+
     }
 
+    private void PrintResult(double result)
+    {
+        // print result
+        _console.WriteLine("The result is: " + result);
+        _console.WriteLine();
+    }
+    private void PrintOptions()
+    {
+        // ask for math operation switch
+        _console.WriteLine("Enter the math operation you want to perform: ");
+        _console.WriteLine("1. Add");
+        _console.WriteLine("2. Subtract");
+        _console.WriteLine("3. Multiply");
+        _console.WriteLine("4. Divide");
+        _console.WriteLine("5. Exit");
+    }
+
+    private double Calculate(double n1, double n2, string operation)
+    {
+        switch (operation)
+        {
+            case "1":
+                return Add(n1, n2);
+            case "2":
+                return Subtract(n1, n2);
+            case "3":
+                return Multiply(n1, n2);
+            case "4":
+                return Divide(n1, n2);
+            default:
+                _console.WriteLine("Invalid operation");
+                return 0;
+        }
+    }
 
     private SQLiteConnection CreateConnection()
     {
