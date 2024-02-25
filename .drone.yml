@@ -12,7 +12,7 @@ steps:
       - dotnet sonarscanner begin
         /k:"easv-devops_PV-Calculator_AY3fwmh5EVvRW2O60EHr"
         /d:sonar.host.url="http://sonar.setgo.dk:9000"
-        /d:sonar.token="#SONARTOKEN"
+        /d:sonar.token="$SONARTOKEN"
         /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
         /d:sonar.qualitygate.wait=true
       - dotnet build --no-incremental
