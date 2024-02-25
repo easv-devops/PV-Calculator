@@ -8,7 +8,7 @@ steps:
       SONARTOKEN:
         from_secret: sonarToken
     commands:
-      - cd ConsoleApp1/
+      - cd TestProject1/
       - dotnet sonarscanner begin
         /k:"easv-devops_PV-Calculator_AY3fwmh5EVvRW2O60EHr"
         /d:sonar.host.url="http://sonar.setgo.dk:9000"
