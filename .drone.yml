@@ -10,7 +10,7 @@ steps:
     commands:
       - cd ConsoleApp1/
       - dotnet sonarscanner begin
-        /k:"easv-devops_PV-Compulsory1_AY2J5xNOEVvRW2O60D44"
+        /k:"easv-devops_PV-Calculator_AY3fwmh5EVvRW2O60EHr"
         /d:sonar.host.url="http://sonar.setgo.dk:9000"
         /d:sonar.token="#SONARTOKEN"
         /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
