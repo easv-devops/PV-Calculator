@@ -7,14 +7,14 @@ namespace TestProject1;
 
 public class TestConsole : IConsole
 {
-    List<string> _lines = ["1", "1", "1", "2", "1", "1"];
+    List<string> _lines = ["0", "1", "1", "1", "2", "1", "1", "3", "1", "1", "4", "1", "1", "6"];
     public void WriteLine(string? message = null)
     {
     }
 
     public string? ReadLine()
     {
-        if (_lines.Count > 1)
+        if (_lines.Count > 0)
         {
             var line = _lines[0];
             _lines.RemoveAt(0);
