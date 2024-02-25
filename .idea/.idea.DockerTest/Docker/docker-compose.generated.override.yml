@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  consoleapp1:
+    build:
+      context: "D:\\SchoolWork\\RiderProjects\\DockerTest"
+      dockerfile: "ConsoleApp1/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/ConsoleApp1.dll"
+    environment:
+      DOTNET_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "consoleapp1:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\patri\\.nuget\\packages:/home/app/.nuget/packages"
+    - "D:\\SchoolWork\\RiderProjects\\DockerTest\\ConsoleApp1:/app:rw"
+    - "D:\\SchoolWork\\RiderProjects\\DockerTest:/src:rw"
+    working_dir: "/app"
