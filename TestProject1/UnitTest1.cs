@@ -87,7 +87,8 @@ public class Tests
     [Test]
     public void TestCalculatorRun()
     {
-        _calculator.RunCalculator();
+        Action action = () => _calculator.RunCalculator();
+        action.Should().NotThrow();
     }
     
 }

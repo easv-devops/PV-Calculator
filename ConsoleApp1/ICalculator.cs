@@ -20,7 +20,7 @@ public interface IConsole
 
 public class ConsoleWrapper : IConsole
 {
-    public void WriteLine(string? message)
+    public void WriteLine(string? message = null)
     {
         Console.WriteLine(message);
     }
